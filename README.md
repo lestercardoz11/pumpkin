@@ -7,6 +7,7 @@
   <img alt="npm" src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white" />
   <img alt="github" src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" />
   <img alt="node" src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white">
+  <img alt="bootstrap" src="https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white">
 </p>
 
 ## About The Project
@@ -29,6 +30,9 @@ The following functional features have been implemented,
 
 - [React](https://reactjs.org/)
 - [Node.js](https://nodejs.org/en/)
+- [Express](https://expressjs.com/)
+- [Bootstrap](https://getbootstrap.com/)
+- [Multer](https://github.com/expressjs/multer)
 
 ## Installation & Set Up
 
