@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
 import UserService from '../services/UserService';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,8 +12,7 @@ const Login = () => {
   };
 
   const [user, setUser] = useState(initialUserState);
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+  const [error, setError] = useState('');
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -30,14 +28,10 @@ const Login = () => {
     UserService.get(data)
       .then((response) => {
         if (response.data) {
-          const value = response.data;
-          setUser({
-            username: value.username,
-            password: value.password,
-            isContributer: value.isContributer,
-          });
+          const value = response.data[0];
 
-          sessionStorage.setItem('user', user);
+          sessionStorage.setItem('username', value.username);
+          sessionStorage.setItem('contributer', value.isContributer);
 
           if (value.isContributer) {
             console.log('contributer');
@@ -48,54 +42,70 @@ const Login = () => {
           }
         }
       })
-      .catch((e) => {
-        console.log(e);
+      .catch((err) => {
+        console.log(err);
+        setError(err?.response?.data?.message ?? 'Unexpected error');
       });
   };
 
   return (
-    <div className='col-sm-4 m-5'>
-      <div className='form-box'>
-        <div className='form-top mb-4'>
-          <div className='form-top-left'>
-            <h4>Login</h4>
-          </div>
+    <>
+      {error ? (
+        <div
+          className='position-absolute top-20 start-50 translate-middle alert alert-danger alert-dismissible fade show w-50'
+          role='alert'>
+          {error}
+          <button
+            type='button'
+            className='btn-close'
+            data-bs-dismiss='alert'
+            aria-label='Close'
+            onClick={() => setError('')}></button>
         </div>
-        <div className='form-bottom'>
-          <div className='form-group'>
-            <label className='sr-only mb-1' for='login-username'>
-              Username
-            </label>
-            <input
-              type='text'
-              className='form-username form-control mb-2'
-              id='login-username'
-              value={user.username}
-              onChange={handleInputChange}
-              name='username'
-              required
-            />
+      ) : null}
+      <div className='col-sm-4 m-5'>
+        <div className='form-box'>
+          <div className='form-top mb-4'>
+            <div className='form-top-left'>
+              <h4>Login</h4>
+            </div>
           </div>
-          <div className='form-group'>
-            <label className='sr-only mb-1' for='login-password'>
-              Password
-            </label>
-            <input
-              type='password'
-              className='form-password form-control mb-4'
-              id='login-password'
-              value={user.password}
-              onChange={handleInputChange}
-              name='password'
-              required
-            />
+          <div className='form-bottom'>
+            <div className='form-group'>
+              <label className='sr-only mb-1' for='login-username'>
+                Username
+              </label>
+              <input
+                type='text'
+                className='form-username form-control mb-2'
+                id='login-username'
+                value={user.username}
+                onChange={handleInputChange}
+                name='username'
+                required
+              />
+            </div>
+            <div className='form-group'>
+              <label className='sr-only mb-1' for='login-password'>
+                Password
+              </label>
+              <input
+                type='password'
+                className='form-password form-control mb-4'
+                id='login-password'
+                value={user.password}
+                onChange={handleInputChange}
+                name='password'
+                required
+              />
+            </div>
+            <button type='submit' onClick={login} className='btn btn-warning'>
+              Login
+            </button>
           </div>
-          <button type='submit' onClick={login} className='btn btn-warning'>
-            Login
-          </button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

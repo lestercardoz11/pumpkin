@@ -1,8 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Logout from './Logout';
 import Report from './Report';
 import Upload from './Upload';
 
 const Contributer = () => {
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    const username = sessionStorage.getItem('username');
+    const contributer = sessionStorage.getItem('contributer');
+
+    if (!username && !contributer) {
+      sessionStorage.clear();
+      navigate('/');
+    }
+  }, [navigate]);
+
   const [nav, setNav] = useState(0);
 
   const renderMain = () => {
@@ -21,8 +35,11 @@ const Contributer = () => {
   return (
     <div className='container-fluid h-100'>
       <div className='row bg-warning p-3'>
-        <div className='col-sm-8 mx-5'>
-          <h2>Pumpkin - Contributer Login</h2>
+        <div className=' d-flex justify-content-between'>
+          <div className='col-sm-8 mx-5'>
+            <h2>Pumpkin - Contributer Login</h2>
+          </div>
+          <Logout />
         </div>
       </div>
 

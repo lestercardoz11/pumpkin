@@ -11,6 +11,7 @@ const Signup = () => {
 
   const [user, setUser] = useState(initialUserState);
   const [show, setShow] = useState(false);
+  const [error, setError] = useState('');
   const handleClose = () => setShow(false);
 
   const handleInputChange = (event) => {
@@ -27,22 +28,31 @@ const Signup = () => {
 
     UserService.create(data)
       .then((response) => {
-        setUser({
-          id: response.data.id,
-          title: response.data.title,
-          description: response.data.description,
-          published: response.data.published,
-        });
-        console.log(response.data);
+        setUser(initialUserState);
+
         setShow(true);
       })
-      .catch((e) => {
-        console.log(e);
+      .catch((err) => {
+        console.log(err);
+        setError(err?.response?.data?.message ?? 'Unexpected error');
       });
   };
 
   return (
     <>
+      {error ? (
+        <div
+          className='position-absolute top-20 start-50 translate-middle alert alert-danger alert-dismissible fade show w-50'
+          role='alert'>
+          {error}
+          <button
+            type='button'
+            className='btn-close'
+            data-bs-dismiss='alert'
+            aria-label='Close'
+            onClick={() => setError('')}></button>
+        </div>
+      ) : null}
       <div className='col-sm-4 m-5'>
         <div className='form-box'>
           <div className='form-top mb-4'>
@@ -79,27 +89,27 @@ const Signup = () => {
                 required
               />
             </div>
-            <div class='form-check mb-2'>
+            <div className='form-check mb-2'>
               <input
-                class='form-check-input'
+                className='form-check-input'
                 type='radio'
                 name='flexRadioDefault'
                 id='normalUser'
                 onClick={() => setUser({ ...user, isContributer: false })}
               />
-              <label class='form-check-label' for='normalUser'>
+              <label className='form-check-label' for='normalUser'>
                 Normal User
               </label>
             </div>
-            <div class='form-check mb-4'>
+            <div className='form-check mb-4'>
               <input
-                class='form-check-input'
+                className='form-check-input'
                 type='radio'
                 name='flexRadioDefault'
                 id='contributerUser'
                 onClick={() => setUser({ ...user, isContributer: true })}
               />
-              <label class='form-check-label' for='contributerUser'>
+              <label className='form-check-label' for='contributerUser'>
                 Contributer
               </label>
             </div>

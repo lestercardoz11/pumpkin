@@ -1,17 +1,39 @@
 import { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
+import ImageService from '../services/ImageService';
 
 const Card = (props) => {
-  const { image, contributer, name, downloads } = props;
+  const { contributer, name, downloads } = props.data;
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const download = () => {
+    const data = {
+      contributer,
+      name,
+      downloads,
+    };
+    ImageService.download(data)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   return (
     <>
       <div className='col-4 mb-5'>
         <div className='card' style={{ width: '14rem' }} onClick={handleShow}>
-          <img src='./default.jpg' className='card-img-top' alt='...' />
+          <img
+            src={`http://localhost:8080/images/${name}`}
+            className='card-img-top w-100'
+            style={{ height: '200px', objectFit: 'cover' }}
+            alt='...'
+            onerror="this.onerror=null;this.src='./default.jpg';"
+          />
           <ul className='list-group list-group-flush'>
             <li className='list-group-item'>Contributer: {contributer}</li>
             <li className='list-group-item'>Image name: {name}</li>
@@ -28,7 +50,13 @@ const Card = (props) => {
         </Modal.Header>
         <Modal.Body className='d-flex justify-content-center'>
           <div className='card' style={{ width: '14rem' }} onClick={handleShow}>
-            <img src='./default.jpg' className='card-img-top' alt='...' />
+            <img
+              src={`http://localhost:8080/images/${name}`}
+              className='card-img-top w-100'
+              style={{ height: '200px', objectFit: 'cover' }}
+              alt='...'
+              onError={"this.onerror=null;this.src='./default.jpg';"}
+            />
             <ul className='list-group list-group-flush'>
               <li className='list-group-item'>Contributer: {contributer}</li>
               <li className='list-group-item'>Image name: {name}</li>
@@ -37,7 +65,7 @@ const Card = (props) => {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <button className='btn btn-warning' onClick={handleClose}>
+          <button className='btn btn-warning' onClick={download}>
             Download
           </button>
         </Modal.Footer>

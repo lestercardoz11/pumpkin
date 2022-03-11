@@ -1,11 +1,50 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import ImageService from '../services/ImageService';
 import Card from './Card';
+import Logout from './Logout';
+import Pagination from './Pagination';
 
 const Normal = () => {
+  let navigate = useNavigate();
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const username = sessionStorage.getItem('username');
+
+    if (!username) {
+      sessionStorage.clear();
+      navigate('/');
+    }
+
+    ImageService.get()
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const filter = (e) => {
+    const value = e.target.value;
+    ImageService.filter(value)
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className='container-fluid h-100'>
       <div className='row bg-warning p-3'>
-        <div className='col-sm-8 mx-5'>
-          <h2>Pumpkin - Normal Login</h2>
+        <div className=' d-flex justify-content-between'>
+          <div className='col-sm-8 mx-5'>
+            <h2>Pumpkin - Normal Login</h2>
+          </div>
+          <Logout />
         </div>
       </div>
 
@@ -15,9 +54,11 @@ const Normal = () => {
           <div className='form-check mb-3'>
             <input
               className='form-check-input'
-              type='checkbox'
-              value=''
+              type='radio'
+              name='categoryRadio'
+              value='Technology'
               id='technology'
+              onClick={(e) => filter(e)}
             />
             <label className='form-check-label' for='technology'>
               Technology
@@ -26,9 +67,11 @@ const Normal = () => {
           <div className='form-check mb-3'>
             <input
               className='form-check-input'
-              type='checkbox'
-              value=''
+              type='radio'
+              name='categoryRadio'
+              value='Marketing'
               id='marketing'
+              onClick={(e) => filter(e)}
             />
             <label className='form-check-label' for='marketing'>
               Marketing
@@ -37,9 +80,11 @@ const Normal = () => {
           <div className='form-check mb-3'>
             <input
               className='form-check-input'
-              type='checkbox'
-              value=''
+              type='radio'
+              name='categoryRadio'
+              value='B2B'
               id='b2b'
+              onClick={(e) => filter(e)}
             />
             <label className='form-check-label' for='b2b'>
               B2B
@@ -49,36 +94,19 @@ const Normal = () => {
 
         <div className='col-md-9 p-5'>
           <div className='row'>
-            <Card contributer={'Alex'} name={'Birds'} downloads={'1001'} />
-            <Card contributer={'Alex1'} name={'Birds1'} downloads={'1002'} />
-            <Card contributer={'Alex2'} name={'Birds2'} downloads={'1003'} />
-            <Card contributer={'Alex3'} name={'Birds3'} downloads={'1004'} />
-            <Card contributer={'Alex4'} name={'Birds4'} downloads={'1005'} />
+            {data.length > 0 ? (
+              <Pagination
+                data={data}
+                RenderComponent={Card}
+                pageLimit={
+                  Math.ceil(data.length / 3) < 4
+                    ? Math.ceil(data.length / 3)
+                    : 4
+                }
+                dataLimit={3}
+              />
+            ) : null}
           </div>
-
-          <nav aria-label='Page navigation'>
-            <ul className='pagination justify-content-end'>
-              <li type='button' className='page-item'>
-                <span className='page-link' aria-label='Previous'>
-                  <span aria-hidden='true'>&laquo;</span>
-                </span>
-              </li>
-              <li type='button' className='page-item'>
-                <span className='page-link'>1</span>
-              </li>
-              <li type='button' className='page-item'>
-                <span className='page-link'>2</span>
-              </li>
-              <li type='button' className='page-item'>
-                <span className='page-link'>3</span>
-              </li>
-              <li type='button' className='page-item'>
-                <span className='page-link' aria-label='Next'>
-                  <span aria-hidden='true'>&raquo;</span>
-                </span>
-              </li>
-            </ul>
-          </nav>
         </div>
       </div>
     </div>

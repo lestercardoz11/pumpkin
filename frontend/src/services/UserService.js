@@ -1,7 +1,7 @@
 import http from '../http-common';
 
 const get = (data) => {
-  return http.post('/users', data);
+  return http.post('/users/validate', data);
 };
 
 const create = (data) => {

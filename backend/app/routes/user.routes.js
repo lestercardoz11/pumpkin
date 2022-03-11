@@ -5,7 +5,7 @@ module.exports = (app) => {
 
   router.post('/', users.create);
 
-  router.get('/', users.validateUser);
+  router.post('/validate', users.validateUser);
 
   app.use('/api/users', router);
 };
