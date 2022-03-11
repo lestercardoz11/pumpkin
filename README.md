@@ -12,9 +12,9 @@
 
 ## About The Project
 
-This repository contains basic pumpkin UI that was created with React, Bootstrap, Node and MySQL.
+This repository contains basic CRUD application that was created with Node, MySQL, Express, React and Bootstrap.
 
-Dash has 3 working pages,
+Pumpkin has 3 working pages,
 
 - Sign up / Log in
 - Contributer
@@ -30,6 +30,7 @@ The following functional features have been implemented,
 
 - [React](https://reactjs.org/)
 - [Node.js](https://nodejs.org/en/)
+- [MySQL](https://www.mysql.com/)
 - [Express](https://expressjs.com/)
 - [Bootstrap](https://getbootstrap.com/)
 - [Multer](https://github.com/expressjs/multer)
